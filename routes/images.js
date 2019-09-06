@@ -41,25 +41,27 @@ app.post('/upLoadImage', upload.single('file'), (req, res)=>{
         name: body.name,
         description: body.description,
         album: body.album
-    });
+});
 
-    image.save((err, imageSave) => {
-        if (err) {
-            return res.status(400).json({
+
+    Album.findById(image.album, (err, albumBD) =>{
+        if (!albumBD) {
+            return res.status(500).json({
                 ok: false,
-                mensaje: "Error saving image",
-                errors: err
+                mensaje: "Error finding album",
+                error: err
             });
-        }
-    
-        Album.findById(imageSave.album, (err, albumBD) =>{
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    mensaje: "Error finding album",
-                    error: error
-                });
-            }else{
+        }else{
+
+            image.save((err, imageSave) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: "Error saving image",
+                        errors: err
+                    });
+                }
+        
                 albumBD.images.push(imageSave.id);
                 albumBD.save((err, albumSave) =>{
                     if (err) {
@@ -70,16 +72,16 @@ app.post('/upLoadImage', upload.single('file'), (req, res)=>{
                         });
                     }
                 })
-            }
-        })
-
-
-        return res.status(200).json({
-            ok: true,
-            image: imageSave,
-            mesaje: `Storage location is: ${req.hostname}/${req.file.path}`
-        });
-    });
+        
+                return res.status(200).json({
+                    ok: true,
+                    image: imageSave,
+                    mesaje: `Storage location is: ${req.hostname}/${req.file.path}`
+                });
+            });
+            
+        }
+    })
 });
 
 
@@ -90,7 +92,7 @@ app.post('/upLoadImage', upload.single('file'), (req, res)=>{
 
 // Delete an image by id
 // ==============================================
-app.delete('/image/:id',  (req, res) => {
+app.delete('/deleteImage/:id',  (req, res) => {
     let id = req.params.id;
 
     
@@ -129,7 +131,7 @@ app.delete('/image/:id',  (req, res) => {
         }
 
 
-
+    //    Update albun when deleting an image
         Album.findById(imageDelete.album, (err, albumBD) =>{
             if (err) {
                 return res.status(500).json({
@@ -184,7 +186,7 @@ app.get('/listImages', (req, res, next) =>{
             });
         }
 
-        Image.count({}, (err, count) => {
+        Image.countDocuments({}, (err, count) => {
             return res.status(200).json({
                 ok: true,
                 image: imageBD,
@@ -192,6 +194,149 @@ app.get('/listImages', (req, res, next) =>{
             });
         });
     })
+});
+
+
+
+
+// ********************************************************
+
+// Update Albums
+app.put('/Updateimage/:id', (req, res) =>{
+    
+    let id = req.params.id;
+    let body = req.body;
+
+    Image.findById(id, (error, imageBD) => {
+        if (error) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: "Error searching image",
+                error: error
+            });
+        }
+
+        if (!imageBD) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: "There is no image with the id " + id,
+                error: { mensaje: 'There is no image with that id' }
+            });
+        } else {
+
+            imageBD.name = body.name;
+            imageBD.description = body.description;
+            imageBD.type = body.type;
+            imageBD.album = body.album;
+
+            imageBD.save((err, imageSave) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: "Error updating image",
+                        err: err
+                    });
+                }
+
+                return res.status(200).json({
+                    ok: true,
+                    image: imageSave,
+                });
+
+            });
+        }
+
+    });
+})
+
+
+
+// ********************************************************
+
+// Transfer image
+app.put('/transferImage/:id', (req, res) =>{
+    
+    let id = req.params.id;
+    let body = req.body;
+
+    Image.findById(id, (error, imageBD) => {
+        if (error) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: "Error searching image",
+                error: error
+            });
+        }
+
+        if (!imageBD) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: "There is no image with the id " + id,
+                error: { mensaje: 'There is no image with that id' }
+            });
+        } else {
+
+ 
+            
+            let albumFrom = body.albumFrom;
+            imageBD.album = body.albumTo;
+
+            imageBD.save((err, imageSave) => {
+                        if (err) {
+                            return res.status(400).json({
+                                ok: false,
+                                mensaje: "Error updating image",
+                                err: err
+                            });
+                        }
+
+
+
+                        //    Update the album when transferring an image
+                        Album.findById(imageBD.album, (err, albumBD) =>{
+                        if (err) {
+    
+                        }else{
+                            
+                            albumBD.images.push(imageBD.id);
+                            
+                            albumBD.save((err, albumSave) =>{
+               
+                            })
+                        }
+                    })
+
+
+                    //   Delete the image from the album when transferring an image
+                    Album.findById(albumFrom, (err, albumBD) =>{
+                        if (err) {
+           
+                        }else{
+                            
+                            let index = albumBD.images.indexOf(id);
+
+                            if (index > -1) {
+                                albumBD.images.splice(index, 1);
+                                console.log('Este es el index', index);
+                             }
+                            
+                            albumBD.save((err, albumSave) =>{
+       
+                            })
+                        }
+                    })
+                // });
+
+
+                return res.status(200).json({
+                    ok: true,
+                    image: imageSave,
+                });
+
+            });
+        }
+
+    });
 })
 
 module.exports = app;

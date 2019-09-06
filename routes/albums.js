@@ -37,7 +37,7 @@ app.post('/formAlbum', (req, res)=>{
 
 // Delete an image by id
 // ==============================================
-app.delete('/album/:id',  (req, res) => {
+app.delete('/deleteAalbum/:id',  (req, res) => {
     let id = req.params.id;
 
     Album.findById(id, (err, albumBD) =>{
@@ -82,7 +82,7 @@ app.get('/listAlbums', (req, res, next) =>{
             });
         }
 
-        Album.count({}, (err, count) => {
+        Album.countDocuments({}, (err, count) => {
             return res.status(200).json({
                 ok: true,
                 albumBD,
