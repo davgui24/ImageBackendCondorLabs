@@ -16,6 +16,6 @@ const albumSchema = new Schema({
     images: { type: [Schema.Types.ObjectId],  default: [] }
 });
 
-albumSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser único' });
+albumSchema.plugin(uniqueValidator, { message: '{PATH} The album must be unique' });
 
 module.exports = mongoose.model('Album', albumSchema);

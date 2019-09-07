@@ -175,7 +175,13 @@ app.delete('/deleteImage/:id',  (req, res) => {
 
 // List images
 app.get('/listImages', (req, res, next) =>{
+
+    let from = req.query.from || 0;
+    from = Number(from);
+
     Image.find({})
+    .skip(from)
+    // .limit(3)
     .populate('album', ('name description'))
     .exec((err, imageBD) =>{
         if (err) {

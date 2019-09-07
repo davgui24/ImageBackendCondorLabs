@@ -72,7 +72,13 @@ app.delete('/deleteAalbum/:id',  (req, res) => {
 
 // List Albums
 app.get('/listAlbums', (req, res, next) =>{
+
+
+    let from = req.query.from || 0;
+    from = Number(from);
     Album.find({})
+    .skip(from)
+    // .limit(3)
     .exec((err, albumBD) =>{
         if (err) {
             return res.status(500).json({
