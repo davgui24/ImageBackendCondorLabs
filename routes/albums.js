@@ -7,7 +7,7 @@ const Album = require("../models/album");
 
 
 // Create Image
-app.post('/formAlbum', (req, res)=>{
+app.post('/form-album', (req, res)=>{
 
     let body = req.body;
 
@@ -28,7 +28,7 @@ app.post('/formAlbum', (req, res)=>{
         return res.status(200).json({
             ok: true,
             album: albumSave,
-            mesaje: 'The album was created successfully'
+            message: 'The album was created successfully'
         });
     });
 });
@@ -37,22 +37,23 @@ app.post('/formAlbum', (req, res)=>{
 
 // Delete an image by id
 // ==============================================
-app.delete('/deleteAalbum/:id',  (req, res) => {
+app.delete('/deleteAlbum/:id',  (req, res) => {
     let id = req.params.id;
+    console.log(id);
 
     Album.findById(id, (err, albumBD) =>{
         if(albumBD){
             if(albumBD.images.length > 0){
-                res.status(200).json({
+                res.status(400).json({
                     ok: false,
-                    messaje: 'There are images associated with this album',
+                    message: 'There are images associated with this album',
                     albumBD: albumBD.images
                 });
             }else{
-                Album.findOneAndDelete(id, (err, albumDelete) => {
+                Album.findByIdAndDelete(id, (err, albumDelete) => {
                     res.status(200).json({
                         ok: true,
-                        messaje: 'Album deleted successfully',
+                        message: 'Album deleted successfully',
                         albumDelete
                     });
                 });

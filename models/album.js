@@ -4,15 +4,10 @@ const uniqueValidator = require('mongoose-unique-validator')
 //Variables to create bd schemas
 let Schema = mongoose.Schema;
 
-//Para definir los roles
-// let typeImageValidate = {
-//     values: ['profile', 'family', 'friends'],
-//     message: '{VALUE} is not a valid type'
-// }
 
 const albumSchema = new Schema({
     name: { type: String, unique: true, required: [true, 'You must enter the name of the album'] },
-    description: { type: String },
+    description: { type: String, required: [true, 'You must enter the album of the album'] },
     images: { type: [Schema.Types.ObjectId],  default: [] }
 });
 
