@@ -14,7 +14,6 @@ const imageSchema = new Schema({
     name: { type: String, unique: true, required: [true, 'You must enter the name of the image'] },
     description: { type: String },
     path: { type: String, required: false },
-    type: { type: String, required: true },
     date: { type: Date, required: true, default: new Date().getDate()},
     album: { type: Schema.Types.ObjectId, ref: "Album",  required: [true, "The albums a mandatory field"] }
 });

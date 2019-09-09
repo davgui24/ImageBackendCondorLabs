@@ -30,25 +30,26 @@ app.use(express.urlencoded({extended: true}))
 // ********************************************************************
 
 
-// Create Image
+// Create ImageonInputImagelogoChange
 app.post('/upLoadImage', upload.single('file'), (req, res)=>{
 
     let body = req.body;
 
     let image = new Image({
         path: req.file.path,
-        type: body.type,
         name: body.name,
         description: body.description,
-        album: body.album
+        album: body.album,
+        date: body.date
 });
+
 
 
     Album.findById(image.album, (err, albumBD) =>{
         if (!albumBD) {
             return res.status(500).json({
                 ok: false,
-                mensaje: "Error finding album",
+                message: "Error finding album",
                 error: err
             });
         }else{
@@ -57,7 +58,7 @@ app.post('/upLoadImage', upload.single('file'), (req, res)=>{
                 if (err) {
                     return res.status(400).json({
                         ok: false,
-                        mensaje: "Error saving image",
+                        message: "Error saving image",
                         errors: err
                     });
                 }
@@ -67,7 +68,7 @@ app.post('/upLoadImage', upload.single('file'), (req, res)=>{
                     if (err) {
                         return res.status(400).json({
                             ok: false,
-                            mensaje: "Error updating Album",
+                            message: "Error updating Album",
                             err: err
                         });
                     }
@@ -232,7 +233,7 @@ app.put('/Updateimage/:id', (req, res) =>{
 
             imageBD.name = body.name;
             imageBD.description = body.description;
-            imageBD.type = body.type;
+            // imageBD.type = body.type;
             imageBD.album = body.album;
 
             imageBD.save((err, imageSave) => {

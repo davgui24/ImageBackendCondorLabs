@@ -39,19 +39,19 @@ app.post('/form-album', (req, res)=>{
 // ==============================================
 app.delete('/deleteAlbum/:id',  (req, res) => {
     let id = req.params.id;
-    console.log(id);
 
     Album.findById(id, (err, albumBD) =>{
         if(albumBD){
             if(albumBD.images.length > 0){
-                res.status(400).json({
+              return res.status(400).json({
                     ok: false,
+                    error: err,
                     message: 'There are images associated with this album',
-                    albumBD: albumBD.images
+                    albumBD: albumBD
                 });
             }else{
                 Album.findByIdAndDelete(id, (err, albumDelete) => {
-                    res.status(200).json({
+                return res.status(200).json({
                         ok: true,
                         message: 'Album deleted successfully',
                         albumDelete
