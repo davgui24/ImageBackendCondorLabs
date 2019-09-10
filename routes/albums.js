@@ -14,6 +14,7 @@ app.post('/form-album', (req, res)=>{
     let album = new Album({
         name: body.name,
         description: body.description,
+        date: body.date,
         images: []
     });
 

@@ -118,7 +118,7 @@ app.delete('/deleteImage/:id',  (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error deleting image',
+                message: 'Error deleting image',
                 err: err
             });
         }
@@ -137,7 +137,7 @@ app.delete('/deleteImage/:id',  (req, res) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: "Error finding album",
+                    message: "Error finding album",
                     error: error
                 });
             }else{
@@ -152,7 +152,7 @@ app.delete('/deleteImage/:id',  (req, res) => {
                     if (err) {
                         return res.status(400).json({
                             ok: false,
-                            mensaje: "Error updating Album",
+                            message: "Error updating Album",
                             err: err
                         });
                     }
@@ -162,7 +162,7 @@ app.delete('/deleteImage/:id',  (req, res) => {
 
         res.status(200).json({
             ok: true,
-            messaje: 'Image deleted successfully',
+            message: 'Image deleted successfully',
             imageDelete
         });
 
@@ -254,7 +254,7 @@ app.put('/Updateimage/:id', (req, res) =>{
         }
 
     });
-})
+});
 
 
 

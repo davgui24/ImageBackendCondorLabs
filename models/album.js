@@ -8,6 +8,7 @@ let Schema = mongoose.Schema;
 const albumSchema = new Schema({
     name: { type: String, unique: true, required: [true, 'You must enter the name of the album'] },
     description: { type: String, required: [true, 'You must enter the album of the album'] },
+    date: { type: Date, required: true, default: new Date().getDate()},
     images: { type: [Schema.Types.ObjectId],  default: [] }
 });
 
