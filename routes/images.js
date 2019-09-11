@@ -145,7 +145,6 @@ app.delete('/deleteImage/:id',  (req, res) => {
 
                 if (index > -1) {
                     albumBD.images.splice(index, 1);
-                    console.log('Este es el index', index);
                  }
 
                 albumBD.save((err, albumSave) =>{
@@ -270,7 +269,7 @@ app.put('/transferImage/:id', (req, res) =>{
         if (error) {
             return res.status(500).json({
                 ok: false,
-                mensaje: "Error searching image",
+                message: "Error searching image",
                 error: error
             });
         }
@@ -278,7 +277,7 @@ app.put('/transferImage/:id', (req, res) =>{
         if (!imageBD) {
             return res.status(400).json({
                 ok: false,
-                mensaje: "There is no image with the id " + id,
+                message: "There is no image with the id " + id,
                 error: { mensaje: 'There is no image with that id' }
             });
         } else {
@@ -292,7 +291,7 @@ app.put('/transferImage/:id', (req, res) =>{
                         if (err) {
                             return res.status(400).json({
                                 ok: false,
-                                mensaje: "Error updating image",
+                                message: "Error updating image",
                                 err: err
                             });
                         }
@@ -324,7 +323,6 @@ app.put('/transferImage/:id', (req, res) =>{
 
                             if (index > -1) {
                                 albumBD.images.splice(index, 1);
-                                console.log('Este es el index', index);
                              }
                             
                             albumBD.save((err, albumSave) =>{
@@ -338,6 +336,7 @@ app.put('/transferImage/:id', (req, res) =>{
                 return res.status(200).json({
                     ok: true,
                     image: imageSave,
+                    message: 'Image transferred successfully'
                 });
 
             });
