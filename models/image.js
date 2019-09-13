@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator')
+const uniqueValidator = require('mongoose-unique-validator');
+const moment = require('moment');
 
 //Variables to create bd schemas
 let Schema = mongoose.Schema;
+let date = { yerar: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate()}
 
 //Para definir los roles
 let typeImageValidate = {
@@ -14,7 +16,7 @@ const imageSchema = new Schema({
     name: { type: String, unique: true, required: [true, 'You must enter the name of the image'] },
     description: { type: String },
     path: { type: String, required: false },
-    date: { type: Date, required: true, default: new Date().getDate()},
+    date: { type: Object, required: true, default: date},
     album: { type: Schema.Types.ObjectId, ref: "Album",  required: [true, "The albums a mandatory field"] }
 });
 
